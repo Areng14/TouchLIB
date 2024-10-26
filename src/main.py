@@ -77,6 +77,69 @@ class Button:
 
         buttonlist.discard(self)
 
+class ToggleButton:
+    def __init__(self, x, y, width, height, label="Button", callback=None, 
+                 toggled=False, on_color=Color.GREEN, off_color=Color.RED):
+        """Initialize a toggle button with its properties."""
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.label = label
+        self.callback = callback
+
+        # Toggle-specific properties
+        self.toggled = toggled
+        self.on_color = on_color
+        self.off_color = off_color
+        self.is_pressed_now = False
+
+        self.draw()
+
+        buttonlist.add(self)
+
+    def draw(self):
+        """Draw the button with the appropriate color based on its toggle state."""
+        color = self.on_color if self.toggled else self.off_color
+        brain.screen.set_fill_color(color)
+        brain.screen.draw_rectangle(self.x, self.y, self.width, self.height)
+
+        # Center the label text
+        text_width = len(self.label) * 6
+        text_x = self.x + (self.width - text_width) // 2 - 4
+        text_y = self.y + (self.height - 8) // 2
+
+        brain.screen.set_pen_color(Color.BLACK)
+        brain.screen.print_at(self.label, x=text_x, y=text_y)
+        brain.screen.set_fill_color(Color.TRANSPARENT)
+        brain.screen.set_pen_color(Color.WHITE)
+
+    def is_pressed(self, touch_x, touch_y):
+        """Check if the button is pressed based on touch coordinates."""
+        return self.x <= touch_x <= self.x + self.width and \
+               self.y <= touch_y <= self.y + self.height
+
+    def handle_press(self):
+        """Toggle the button state and redraw."""
+        if not self.is_pressed_now:
+            self.toggled = not self.toggled
+            self.draw()
+
+            if self.callback:
+                self.callback(self.toggled)
+
+            self.is_pressed_now = True
+
+    def reset(self):
+        """Reset the button to allow future presses."""
+        self.is_pressed_now = False
+
+    def delete(self):
+        """Remove the button from the screen and the listener set."""
+        brain.screen.set_fill_color(Color.BLACK)
+        brain.screen.draw_rectangle(self.x, self.y, self.width, self.height)
+        buttonlist.discard(self)
+
 def checkforbuttons():
     """Continuously poll for button presses."""
     while True:
