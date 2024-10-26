@@ -1,9 +1,9 @@
 # ---------------------------------------------------------------------------- #
 #                                                                              #
 # 	Module:       main.py                                                      #
-# 	Author:       ADMIN                                                        #
+# 	Author:       Areng                                                        #
 # 	Created:      10/26/2024, 8:09:18 PM                                       #
-# 	Description:  Optimized V5 project                                         #
+# 	Description:  A touch detecting script                                     #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 
